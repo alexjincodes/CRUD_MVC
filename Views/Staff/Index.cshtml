@@ -1,0 +1,85 @@
+﻿<body>
+    <div align="center">
+        <h2 align="center">Alex Jin</h2>
+        <p align="center">This is a test paragraph</p>
+        <img src="http://industryconnect.io/Images/IndustryConnectLogo.png" alt="IndustryConnect Logo">
+
+        <br />
+
+        <button id="home" type="button">
+            Go back to home page
+        </button>
+        <br />
+
+        <h4>Drop down list</h4>
+        <input id="dropdown" style="width: 35%" />
+    </div>
+</body>
+<br />
+
+<div id="grid"></div>
+<script>
+var dataSource = new kendo.data.DataSource({
+  transport: {
+      read: {
+          type: "GET",
+        url: "../Staff/GetUser",
+      contentType: "application/json"
+    }
+  },
+  pageSize: 10
+});
+
+
+
+$("#grid").kendoGrid({
+    dataSource: dataSource,
+    columns: [{
+        field: "Name", title: "Name", width: "150px", editor: dropDownEditor, template: "#=ModelFinal.Name#"
+    },
+        {
+            field: "Id", title: "Id", width: "200px"
+        }]
+});
+
+$(document).ready(function () {
+    $("#dropdown").kendoDropDownList({
+        dataTextField: "Name",
+        dataValueField: "Id",
+        dataSource: dataSource,
+    });
+});
+</script>
+
+<script>
+    function dropDownEditor(container, options) {
+        $('<input required name="' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                autoBind: false,
+                dataTextField: "Name",
+                dataValueField: "Id",
+                dataSource: {
+                    type: "odata",
+                    transport: {
+                        read: {
+                            type: "GET",
+                            url: "../Staff/GetUser",
+                            contentType: "application/json"
+                        }
+                    }
+                }
+            });
+    }
+
+</script>
+
+
+
+@*Jquery code*@
+<script>
+    $("#home").click(function() {
+        window.location.href="/Home/Index"
+    });
+</script>
+
